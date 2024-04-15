@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-west-2"
 }
-
+  
 data "aws_ami" "amazon_linux" {
   most_recent = true
 
