@@ -2,53 +2,45 @@ variable region {
   type        = string
   description = "provide region"
 }
-
-variable vps_cidr {
-  type        = string
-  default     = ""
-  description = "provide vpc"
+variable vpc_cidr {
+  type = list(object({
+    cidr_blocks           = string
+    dns_s   = bool
+    dns_h = bool
+  }))
 }
 
 variable ip_on_launch {
-  type        = string
-  default     = ""
-  description = "description"
+  type        = bool
 }
 
-variable subnet1_cidr {
-  type        = string
-  default     = ""
+variable subnet_cidr {
+  type        = list(object({
+      cidr = string
+      subnet_name = string
+
+  }))
+
   description = "provide subnet1 cidr block"
 }
 
-variable subnet2_cidr {
-  type        = string
-  default     = ""
-  description = "provide subnet2 block"
-}
 
-variable subnet3_cidr {
-  type        = string
-  default     = ""
-  description = "provide subnet3 block"
-}
-
-variable subnet4_cidr {
-  type        = string
-  default     = ""
-  description = "provide subnet4 block"
-}
-
-variable instance_type {
-  type        = string
-  default     = ""
-  description = "description"
+variable instance_type_and_name {
+type        = list(object({
+  in_type= string
+  in_name=string
+}))
+  description = "provide instance type and name"
 }
 
 
-variable availability_zones {
-  description = "Availability zones for subnets"
-  type        = string
+ variable ports {
+  type        = list(number)
+  description = "List of ports to open in the security group"
+}
+
+variable rt_igw_names {
+  type        = list
 }
 
 
@@ -70,47 +62,3 @@ variable availability_zones {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-variable vpc_cidr {
-  type        = string
-  description = "provide vpc block"
-}
-
-variable subnet1_cidr {
-  type        = string
-  description = "provide subnet1 block"
-}
-variable subnet2_cidr {
-  type        = string
-  description = "provide subnet2 block"
-}
-variable subnet3_cidr {
-  type        = string
-  description = "provide subnet3 block"
-}
-
-variable subnet4_cidr {
-  type        = string
-  description = "provide subnet4 block"
-}
-variable ip_on_lunch {
-  type        = bool
- 
-}
-variable instance_type {
-  type        = string
-  default     = ""
-  description = "description"
-}

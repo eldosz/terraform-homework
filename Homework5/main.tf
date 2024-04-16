@@ -2,50 +2,72 @@ provider aws{
     region = var.region
 
 }
-resource "aws_vps" "kazien"{
-    cidr_block = var.vps_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+resource "aws_vpc" "kaizen"{
+  cidr_block = var.vpc_cidr[0].cidr_blocks
+  enable_dns_support   = var.vpc_cidr[0].dns_s
+  enable_dns_hostnames = var.vpc_cidr[0].dns_h
 }
 
-
-resource "aws_vpc" "kaizen" {
-  cidr_block = var.vpc_cidr
-}
 
 resource "aws_subnet" "public1" {
   vpc_id     = aws_vpc.kaizen.id
   map_public_ip_on_launch = var.ip_on_launch
-  cidr_block = var.subnet1_cidr
-  availability_zone ="us-west-2a"
+  cidr_block = var.subnet_cidr[0].cidr
+  availability_zone = "${var.region}a"
+  tags={
+    Name=var.subnet_cidr[0].subnet_name
+
+  }
 }
 resource "aws_subnet" "public2" {
   vpc_id     = aws_vpc.kaizen.id
   map_public_ip_on_launch = var.ip_on_launch
-  cidr_block = var.subnet2_cidr
-  availability_zone ="us-west-2b"
+  cidr_block = var.subnet_cidr[1].cidr
+  availability_zone ="${var.region}b"
+  
+tags={
+    Name=var.subnet_cidr[1].subnet_name
+
+  }
+
 }
 resource "aws_subnet" "private1" {
   vpc_id     = aws_vpc.kaizen.id
-  cidr_block = var.subnet3_cidr
-  availability_zone ="us-west-2c"
+  map_public_ip_on_launch = var.ip_on_launch
+  cidr_block = var.subnet_cidr[2].cidr
+  availability_zone ="${var.region}c"
+  tags={
+    Name=var.subnet_cidr[2].subnet_name
+
+  }
 }
 resource "aws_subnet" "private2" {
   vpc_id     = aws_vpc.kaizen.id
   map_public_ip_on_launch = var.ip_on_launch
-  cidr_block = var.subne4_cidr
-  availability_zone ="us-west-2d"
+  cidr_block = var.subnet_cidr[3].cidr
+  availability_zone ="${var.region}d"
+  tags={
+    Name=var.subnet_cidr[3].subnet_name
+
+  }
 }
 
 resource "aws_internet_gateway" "homework5_igw" {
   vpc_id = aws_vpc.kaizen.id
+  tags={
+    Name= var.rt_igw_names[0]
+
+  }
 }
 
 
 
 resource "aws_route_table" "public-rt" {
   vpc_id = aws_vpc.kaizen.id
-   map_public_ip_on_launch = true
+    tags={
+    Name= var.rt_igw_names[1]
+
+  }
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -56,10 +78,9 @@ resource "aws_route_table" "public-rt" {
 
 resource "aws_route_table" "private-rt" {
   vpc_id = aws_vpc.kaizen.id
+    tags={
+    Name= var.rt_igw_names[2]
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.homework5_igw.id
   }
 
 }
